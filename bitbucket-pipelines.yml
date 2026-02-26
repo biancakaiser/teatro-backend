@@ -1,0 +1,59 @@
+definitions:
+  steps:
+    - step: &deploy-prod
+        name: Run container
+        image: google/cloud-sdk:alpine
+        deployment: prod
+        services:
+          - docker
+        caches:
+          - docker
+        script:
+          - export DOCKER_BUILDKIT=0
+          # Generate configuration files
+          - apk add gettext libintl # envsubst installation
+          - /usr/bin/envsubst < ./app_config.template.js > ./app_config.js
+          # Extract Google Cloud API Key
+          - echo $PROD_GCLOUD_API_KEYFILE | base64 -d > ./gcloud-api-key.json
+          # Build and push docker image to Container Registry
+          - export IMAGE_NAME=gcr.io/$PROD_GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT-$BITBUCKET_BRANCH
+          - cat ./gcloud-api-key.json | docker login -u _json_key --password-stdin https://gcr.io
+          - docker build -t ${IMAGE_NAME} --build-arg GIT_COMMIT=$BITBUCKET_COMMIT --build-arg NODE_ENV=prod .
+          - docker push ${IMAGE_NAME}
+          # Deploy to Cloud Run
+          - gcloud auth activate-service-account --key-file gcloud-api-key.json
+          - gcloud run deploy $BITBUCKET_REPO_SLUG-$BITBUCKET_BRANCH --platform=managed --allow-unauthenticated --image=$IMAGE_NAME --port=$CONTAINER_PORT --memory=$GCLOUD_RUN_MEMORY --timeout=$GCLOUD_RUN_TIMEOUT --region=$GCLOUD_RUN_REGION --set-cloudsql-instances=$GCLOUD_RUN_DB_PROD --project=$PROD_GCLOUD_PROJECT
+    - step: &deploy-dev
+        name: Run container
+        image: google/cloud-sdk:alpine
+        deployment: dev
+        services:
+          - docker
+        caches:
+          - docker
+        script:
+          - export DOCKER_BUILDKIT=0
+          # Set DEV environment variables
+          - export TYPEORM_SOCKET=$GCLOUD_RUN_DB_DEV_SOCKET
+          - export TYPEORM_USERNAME=$GCLOUD_RUN_DB_DEV_USER
+          - export TYPEORM_PASSWORD=$GCLOUD_RUN_DB_DEV_PASSWORD
+          # Generate configuration files
+          - apk add gettext libintl # envsubst installation
+          - /usr/bin/envsubst < ./app_config.template.js > ./app_config.js
+          # Extract Google Cloud API Key
+          - echo $DEV_GCLOUD_API_KEYFILE | base64 -d > ./gcloud-api-key.json
+          # Build and push docker image to Container Registry
+          - export IMAGE_NAME=gcr.io/$DEV_GCLOUD_PROJECT/$BITBUCKET_REPO_SLUG:$BITBUCKET_COMMIT-$BITBUCKET_BRANCH
+          - cat ./gcloud-api-key.json | docker login -u _json_key --password-stdin https://gcr.io
+          - docker build -t ${IMAGE_NAME} --build-arg GIT_COMMIT=$BITBUCKET_COMMIT --build-arg NODE_ENV=dev .
+          - docker push ${IMAGE_NAME}
+          # Deploy to Cloud Run
+          - gcloud auth activate-service-account --key-file gcloud-api-key.json
+          - gcloud run deploy $BITBUCKET_REPO_SLUG-$BITBUCKET_BRANCH --platform=managed --allow-unauthenticated --image=$IMAGE_NAME --port=$CONTAINER_PORT --memory=$GCLOUD_RUN_MEMORY --timeout=$GCLOUD_RUN_TIMEOUT --region=$GCLOUD_RUN_REGION --set-cloudsql-instances=$GCLOUD_RUN_DB_DEV --project=$DEV_GCLOUD_PROJECT
+
+pipelines:
+  branches:
+    master:
+      - step: *deploy-prod
+    dev:
+      - step: *deploy-dev
