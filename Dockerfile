@@ -1,0 +1,19 @@
+FROM node:10-slim
+
+ARG GIT_COMMIT=none
+ARG NODE_ENV
+ARG GCLOUD_BUCKET
+
+ENV GIT_COMMIT ${GIT_COMMIT}
+ENV NODE_ENV=$NODE_ENV
+ENV GCLOUD_BUCKET=$GCLOUD_BUCKET
+ENV TZ America/Sao_Paulo
+
+WORKDIR /server
+COPY . /server
+
+RUN npm install --production
+
+EXPOSE 8090
+
+CMD npm run docker ${NODE_ENV} 8090 ${GIT_COMMIT}
