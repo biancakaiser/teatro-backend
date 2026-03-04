@@ -64,8 +64,8 @@ typings/
 apidoc
 
 #Google key
-*key_prod.json
-!google_key_prod.json
+*key_*.json
+!google_key_*.json
 
 # Mac OS
 .DS_Store
