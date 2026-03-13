@@ -11,7 +11,7 @@ const connections = new Map();
  * */
 function createConnection() {
   return knex({
-    client: "mysql",
+    client: "mysql2",
     connection: {
       ...databaseConfig,
     },
