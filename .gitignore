@@ -74,3 +74,4 @@ apidoc
 temp_uploads/*
 !temp_uploads/.gitkeep
 
+google_key_dev.json
