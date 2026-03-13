@@ -1,0 +1,18 @@
+# Example environment variables for teatro-backend
+
+# Database connection settings
+TYPEORM_SOCKET=postgresql://user:password@localhost:5432/teatrodb
+TYPEORM_USERNAME=admin
+TYPEORM_PASSWORD=password
+TYPEORM_HOST="127.0.0.1"
+TYPEORM_PORT=3306
+TYPEORM_DATABASE=teatrodb
+
+APP_NAME=teatro-backend
+ENVIRONMENT=development
+LOG_LEVEL=info
+TIMEZONE=America/Sao_Paulo
+
+PROD_URL="https://api.teatromusicadosp.com.br/"
+DEV_URL="https://dev.teatromusicadosp.com.br/"
+LOCAL_URL="http://localhost:8089"

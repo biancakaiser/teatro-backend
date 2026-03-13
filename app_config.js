@@ -16,14 +16,17 @@ const config = {
     path: `/v${majorVersion}`,
     port: process.argv[3] || 8089,
     checkOrigin: origin => true,
+    devURL: process.env.DEV_URL  || "https://dev.teatromusicadosp.com.br/",
+    prodURL: process.env.PROD_URL  || "https://api.teatromusicadosp.com.br",
+    localURL: process.env.LOCAL_URL || `http://localhost:${process.argv[3] || 8089}`,
   },
   database: {
-    // socketPath: process.env.TYPEORM_SOCKET,
+    socketPath: process.env.TYPEORM_SOCKET,
     host: process.env.TYPEORM_HOST || "127.0.0.1",
     port: Number(process.env.TYPEORM_PORT) || 3306,
     user: process.env.TYPEORM_USERNAME || "root",
     password: process.env.TYPEORM_PASSWORD,
-    database: "teatro",
+    database: process.env.TYPEORM_DATABASE || "teatro",
   },
   sync: false,
 };
@@ -37,9 +40,9 @@ module.exports = {
   isTestEnv: () => config.environment === "test",
   // Retorna URL do site
   getWebsiteURL: () => {
-    const productionURL = "https://api.teatromusicadosp.com.br";
-    const developmentURL = "https://teatro-backend-dev-ayztplarvq-ue.a.run.app";
-    const localURL = `http://localhost:${config.server.port}`;
+    const productionURL = config.server.prodURL;
+    const developmentURL = config.server.devURL;
+    const localURL = config.server.localURL;
     // eslint-disable-next-line default-case
     switch (config.environment) {
       case "prod":
