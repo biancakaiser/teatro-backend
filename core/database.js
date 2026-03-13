@@ -13,8 +13,6 @@ function createConnection() {
   return knex({
     client: "mysql",
     connection: {
-      socketPath: "",
-      port: 3307,
       ...databaseConfig,
     },
   });

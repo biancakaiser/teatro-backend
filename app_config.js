@@ -21,7 +21,7 @@ const config = {
     localURL: process.env.LOCAL_URL || `http://localhost:${process.argv[3] || 8089}`,
   },
   database: {
-    socketPath: process.env.TYPEORM_SOCKET,
+    socketPath: process.env.TYPEORM_SOCKET || "",
     host: process.env.TYPEORM_HOST || "127.0.0.1",
     port: Number(process.env.TYPEORM_PORT) || 3306,
     user: process.env.TYPEORM_USERNAME || "root",
