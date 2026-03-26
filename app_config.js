@@ -16,22 +16,20 @@ const config = {
     path: `/v${majorVersion}`,
     port: process.argv[3] || 8089,
     checkOrigin: origin => true,
-    devURL: process.env.DEV_URL  || "https://dev.teatromusicadosp.com.br/",
-    prodURL: process.env.PROD_URL  || "https://api.teatromusicadosp.com.br",
-    localURL: process.env.LOCAL_URL || `http://localhost:${process.argv[3] || 8089}`,
+    devURL: process.env.DEV_URL,
+    prodURL: process.env.PROD_URL,
+    localURL: process.env.LOCAL_URL,
   },
   database: {
     //socketPath: process.env.TYPEORM_SOCKET || "",
     host: process.env.TYPEORM_HOST || "127.0.0.1",
     port: Number(process.env.TYPEORM_PORT) || 3306,
-    user: process.env.TYPEORM_USERNAME || "root",
+    user: process.env.TYPEORM_USERNAME,
     password: process.env.TYPEORM_PASSWORD,
-    database: process.env.TYPEORM_DATABASE || "teatro",
+    database: process.env.TYPEORM_DATABASE,
   },
   sync: false,
 };
-
-console.log(config);
 
 module.exports = {
   ...config,

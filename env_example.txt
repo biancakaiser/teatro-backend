@@ -8,11 +8,22 @@ TYPEORM_HOST="127.0.0.1"
 TYPEORM_PORT=3306
 TYPEORM_DATABASE=teatrodb
 
+# Environment settings
 APP_NAME=teatro-backend
 ENVIRONMENT=development
 LOG_LEVEL=info
 TIMEZONE=America/Sao_Paulo
 
-PROD_URL="https://api.teatromusicadosp.com.br/"
-DEV_URL="https://dev.teatromusicadosp.com.br/"
+# Server URL settings
+PROD_URL="https://api.teatromusicadosp.com.br"
+DEV_URL="https://dev.teatromusicadosp.com.br"
 LOCAL_URL="http://localhost:8089"
+
+# Storage connection settings
+STORAGE_REGION=us-east-1
+STORAGE_CUSTOM_URL="https://static.teatromusicadosp.com.br"
+STORAGE_BUCKET_NAME="teatromusicadosp"
+STORAGE_ACCESS_KEY_ID=
+STORAGE_SECRET_ACCESS_KEY=
+STORAGE_USER_ID=
+STORAGE_ENDPOINT="https://${STORAGE_USER_ID}.r2.cloudflarestorage.com"

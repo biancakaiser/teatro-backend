@@ -70,7 +70,8 @@ module.exports = class extends (
         Resource.findByUUID(relation.UUID),
       ),
     );
-    // console.log("TCL: extends -> getPictures -> pictures", pictures)
+    // console.log("TCL: extends -> getPictures -> pictures", pictures);
+    // console.log("TCL: extends -> getPictures -> resourceRelations", resourceRelations);
 
     if (pictures[0]) {
       const picturesWithUrl = await Promise.all(

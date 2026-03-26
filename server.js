@@ -30,7 +30,7 @@ if (appConfig.sync) {
 // Inicializar o servidor
 app.listen(serverConfig.port, () => {
   console.info(
-    `Espresso Labs API v${appConfig.majorVersion} (${environment}) running on localhost:${serverConfig.port}${serverConfig.path}`,
+    `Teatro Backend API v${appConfig.majorVersion} (${environment}) running on localhost:${serverConfig.port}${serverConfig.path}`,
   );
   app.emit("serverConfigReady");
 });

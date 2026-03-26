@@ -3,8 +3,8 @@ const mailjet = require("node-mailjet").connect("99db77457a46c7a427c5533c8219448
 const appConfig = require("./app_config.js");
 
 const mainSender = {
-	Name: "EspressoDev",
-	Email: "development@espressolabs.com.br",
+	Name: "Teatro Musicado SP",
+	Email: "contato@teatromusicadosp.com.br",
 };
 
 // Send e-mail with predefined template

@@ -65,7 +65,7 @@ apidoc
 
 #Google key
 *key_*.json
-!google_key_*.json
+google_key_*.json
 
 # Mac OS
 .DS_Store
@@ -73,5 +73,3 @@ apidoc
 # Uploads
 temp_uploads/*
 !temp_uploads/.gitkeep
-
-google_key_dev.json

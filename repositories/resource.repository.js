@@ -37,6 +37,7 @@ class ResourceRepository extends BaseRepository {
   }
 
   async saveLocal(request, data, fileSizeLimit = 10) {
+
     const localResource = new Resource({
       source: "LOCAL",
       fileName: await createRandomHash(String(Math.random())),
@@ -46,7 +47,7 @@ class ResourceRepository extends BaseRepository {
     try {
       const { size, mimetype } = await upload.local(request, {
         fileSizeLimit,
-        fileName: localResource.fileName,
+        fileName: `${localResource.fileName}.jpg`,
         fileTypes: /jpeg|jpg|png/,
       });
 
@@ -78,6 +79,7 @@ class ResourceRepository extends BaseRepository {
   }
 
   async saveRemote(localResource) {
+    console.log("Saving remote resource for local resource:", localResource);
     await upload.remote(localResource);
     // eslint-disable-next-line no-param-reassign
     localResource.source = "REMOTE";
@@ -86,6 +88,7 @@ class ResourceRepository extends BaseRepository {
   }
 
   async findPictures(entity) {
+    console.log("Finding pictures for entity:", entity);
     const entityName = entity.tableName.toLowerCase();
     if (!["company", "person", "theater", "play"].includes(entityName)) {
       throw new Error("Entidade inválida para busca de recursos");
@@ -96,6 +99,8 @@ class ResourceRepository extends BaseRepository {
     const resources = await this.relations.queryBuilder((qb) => {
       qb.where(entityField, "=", entity.id);
     });
+
+    console.log("Found related resources:", resources);
 
     const pictures = await this.queryBuilder((qb) => {
       qb.whereIn(
@@ -113,7 +118,9 @@ class ResourceRepository extends BaseRepository {
           const existsRemote = await upload.checkRemoteExistence(
             picture.fileName,
           );
+          // console.log(`Checked remote existence for ${picture.fileName}:`, existsRemote);
           if (existsRemote) url = upload.getRemoteUrl(picture.fileName);
+          // console.log(`URL for picture ${picture.fileName}:`, url);
         } catch (error) {
           console.error("RESOURCE ERROR:", error);
         }
