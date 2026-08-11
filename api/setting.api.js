@@ -11,7 +11,7 @@ const Person = require("../_model/person.model.js");
 const Genre = require("../_model/genre.model.js");
 
 const { wrapAsync, authenticate, validateRequest } = require("./middleware");
-const { JoiEntityId } = require("../core/utils/general");
+const { JoiEntityId, JoiMultipleEntityIds } = require("../core/utils/general");
 const { SettingBaseRepo } = require("../repositories/repositories");
 
 routes.use(new RateLimit({
@@ -48,8 +48,8 @@ routes.post("/create", authenticate(), validateRequest({
 	year: Joi.string().length(4).allow(""),
 	languageId: JoiEntityId.allow(null),
 	kind: Joi.string().allow("", null),
-	translatorId: JoiEntityId.allow(null),
-	adapterId: JoiEntityId.allow(null),
+	translatorId: JoiMultipleEntityIds,
+	adapterId: JoiMultipleEntityIds,
 }), wrapAsync(async (req, res) => {
 	const { payload } = res.locals;
 	const setting = new Setting();
@@ -118,8 +118,8 @@ routes.post("/update", authenticate(), validateRequest({
 	year: Joi.string().length(4).allow("", null),
 	languageId: JoiEntityId.allow("", null),
 	kind: Joi.string().allow("", null),
-	translatorId: JoiEntityId.allow("", null),
-	adapterId: JoiEntityId.allow("", null),
+	translatorId: JoiMultipleEntityIds,
+	adapterId: JoiMultipleEntityIds,
 }), wrapAsync(async (req, res) => {
 	const { payload } = res.locals;
 	const setting = await Setting.getById(payload.id);

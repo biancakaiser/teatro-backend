@@ -7,6 +7,10 @@ const Joi = require("joi");
 // const JoiEntityId = Joi.string().min(1).max(16);
 const JoiEntityId = Joi.number();
 
+const JoiMultipleEntityIds =
+  Joi.string()
+  .regex(/^\d+(,\d+)*$/)
+  .allow("", null)
 // ///////////////////////////////////////////////////////////////////////////////////////////
 // DateTime handling
 
@@ -68,4 +72,5 @@ module.exports = {
   createHash,
   generateId,
   JoiEntityId,
+  JoiMultipleEntityIds,
 };
